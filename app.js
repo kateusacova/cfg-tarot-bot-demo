@@ -74,6 +74,12 @@ bot.on("callback_query", async (query) => {
       const question = msg.text;
       const card = getRandomCard();
 
+      // Send a loading message with the card image
+      const loadingImagePath = path.join("images", "loading.jpeg");
+      await bot.sendPhoto(chatId, loadingImagePath, {
+        caption: "Looking at your future...",
+      });
+
       const interpretation = await getCardInterpretation(
         card.name,
         card.description,
