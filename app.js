@@ -76,6 +76,7 @@ bot.on("callback_query", async (query) => {
 
       // Send a loading message with the card image
       const loadingImagePath = path.join("images", "loading.jpeg");
+
       await bot.sendPhoto(chatId, loadingImagePath, {
         caption: "Looking at your future...",
       });
@@ -87,8 +88,17 @@ bot.on("callback_query", async (query) => {
       );
 
       const cardImagePath = path.join("images", card.image);
-      bot.sendPhoto(chatId, cardImagePath, {
+
+      await bot.sendPhoto(chatId, cardImagePath, {
         caption: `Your card: ${card.name}\n\n${interpretation}`,
+      });
+
+      await bot.sendMessage(chatId, "Would you like another reading?", {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "One-Card Reading", callback_data: "one_card_reading" }],
+          ],
+        },
       });
     });
   }
