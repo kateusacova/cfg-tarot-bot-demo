@@ -35,7 +35,7 @@ async function getCardInterpretation(cardName, cardDescription, question) {
       messages: [
         {
           role: "developer",
-          content: `You are a tarot expert. Provide an interpretation for the tarot card with name "${cardName}" and description "${cardDescription}" in response to the question: "${question}".`,
+          content: `You are a tarot expert with a playful and empowering style, catering to a female audience. Provide a fun yet insightful interpretation for the tarot card named "${cardName}" with the description "${cardDescription}" in response to the question: "${question}". Keep the tone light, relatable, and uplifting.`,
         },
       ],
       model: "gpt-3.5-turbo",
@@ -52,7 +52,7 @@ async function getCardInterpretation(cardName, cardDescription, question) {
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    "Welcome to the Tarot Bot for Developers! Click the button below to get your reading.",
+    "Welcome to DevTarot Bot! 🌟 Ready to uncover your developer destiny? Click the button below and let the cards reveal your coding fate!",
     {
       reply_markup: {
         inline_keyboard: [
@@ -68,7 +68,10 @@ bot.on("callback_query", async (query) => {
   const chatId = query.message.chat.id;
 
   if (query.data === "one_card_reading") {
-    bot.sendMessage(chatId, "What is your question for the tarot?");
+    bot.sendMessage(
+      chatId,
+      "What's on your mind? Ask the tarot your burning question!"
+    );
 
     bot.once("message", async (msg) => {
       const question = msg.text;
@@ -78,7 +81,7 @@ bot.on("callback_query", async (query) => {
       const loadingImagePath = path.join("images", "loading.jpeg");
 
       await bot.sendPhoto(chatId, loadingImagePath, {
-        caption: "Looking at your future...",
+        caption: "Peering into the mystical depths of your coding future...",
       });
 
       const interpretation = await getCardInterpretation(
@@ -93,13 +96,17 @@ bot.on("callback_query", async (query) => {
         caption: `Your card: ${card.name}\n\n${interpretation}`,
       });
 
-      await bot.sendMessage(chatId, "Would you like another reading?", {
-        reply_markup: {
-          inline_keyboard: [
-            [{ text: "One-Card Reading", callback_data: "one_card_reading" }],
-          ],
-        },
-      });
+      await bot.sendMessage(
+        chatId,
+        "Craving more wisdom? Let’s draw another card!",
+        {
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: "One-Card Reading", callback_data: "one_card_reading" }],
+            ],
+          },
+        }
+      );
     });
   }
 });
